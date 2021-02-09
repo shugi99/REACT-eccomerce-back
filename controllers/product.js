@@ -4,13 +4,10 @@ const slugify = require('slugify');
 
 exports.create = async (req, res) => {
   try {
-    console.log(req.body);
     req.body.slug = slugify(req.body.title);
     const newProduct = await new Product(req.body).save();
     res.json(newProduct);
   } catch (err) {
-    console.log(err);
-
     res.status(400).json({
       err: err.message,
     });
@@ -34,7 +31,6 @@ exports.remove = async (req, res) => {
     }).exec();
     res.json(deleted);
   } catch (err) {
-    console.log(err);
     return res.staus(400).send('Product delete failed');
   }
 };
@@ -59,7 +55,6 @@ exports.update = async (req, res) => {
     ).exec();
     res.json(updated);
   } catch (err) {
-    console.log('PRODUCT UPDATE ERROR ----> ', err);
     // return res.status(400).send("Product update failed");
     res.status(400).json({
       err: err.message,
@@ -103,7 +98,9 @@ exports.list = async (req, res) => {
 
     res.json(products);
   } catch (err) {
-    console.log(err);
+    res.status(400).json({
+      err: err.message,
+    });
   }
 };
 
@@ -132,7 +129,7 @@ exports.productStar = async (req, res) => {
       },
       { new: true }
     ).exec();
-    console.log('ratingAdded', ratingAdded);
+
     res.json(ratingAdded);
   } else {
     // if user have already left rating, update it
@@ -143,7 +140,7 @@ exports.productStar = async (req, res) => {
       { $set: { 'ratings.$.star': star } },
       { new: true }
     ).exec();
-    console.log('ratingUpdated', ratingUpdated);
+
     res.json(ratingUpdated);
   }
 };
@@ -224,7 +221,7 @@ const handleStar = (req, res, stars) => {
   ])
     .limit(12)
     .exec((err, aggregates) => {
-      if (err) console.log('AGGREGATE ERROR', err);
+      if (err);
       Product.find({ _id: aggregates })
         .populate('category', '_id name')
         .populate('subs', '_id name')
@@ -289,43 +286,35 @@ exports.searchFilters = async (req, res) => {
   } = req.body;
 
   if (query) {
-    console.log('query --->', query);
     await handleQuery(req, res, query);
   }
 
   // price [20, 200]
   if (price !== undefined) {
-    console.log('price ---> ', price);
     await handlePrice(req, res, price);
   }
 
   if (category) {
-    console.log('category ---> ', category);
     await handleCategory(req, res, category);
   }
 
   if (stars) {
-    console.log('stars ---> ', stars);
     await handleStar(req, res, stars);
   }
 
   if (sub) {
-    console.log('sub ---> ', sub);
     await handleSub(req, res, sub);
   }
 
   if (shipping) {
-    console.log('shipping ---> ', shipping);
     await handleShipping(req, res, shipping);
   }
 
   if (color) {
-    console.log('color ---> ', color);
     await handleColor(req, res, color);
   }
 
   if (brand) {
-    console.log('brand ---> ', brand);
     await handleBrand(req, res, brand);
   }
 };

@@ -1,13 +1,13 @@
 const nodeMailer = require('nodemailer');
+
+const mailGun = require('nodemailer-mailgun-transport');
 const defaultEmailData = { from: 'noreply@node-react.com' };
 
-exports.transporter = nodeMailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 587,
-  secure: false,
-  requireTLS: true,
+const auth = {
   auth: {
-    user: 'shugiyenlazala@gmail.com',
-    pass: 'edjnajcvfrvodlqu',
+    api_key: process.env.API_KEY || 'mailgun_api_key', // TODO:
+    domain: process.env.DOMAIN || 'mailgun_domain', // TODO:
   },
-});
+};
+
+exports.transporter = nodeMailer.createTransport(mailGun(auth));

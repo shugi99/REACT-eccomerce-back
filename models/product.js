@@ -64,11 +64,6 @@ const productSchema = new mongoose.Schema(
         postedBy: { type: ObjectId, ref: 'User' },
       },
     ],
-    comment: {
-      type: String,
-      required: true,
-      postedBy: { type: ObjectId, ref: 'User' },
-    },
   },
   { timestamps: true }
 );
