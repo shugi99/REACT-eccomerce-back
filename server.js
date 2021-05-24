@@ -6,6 +6,8 @@ const cors = require('cors');
 const {readdirSync} = require('fs');
 require('dotenv').config();
 const connectDB = require('./config/db');
+const path = require('path');
+
 // app
 const app = express();
 connectDB();
