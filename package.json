@@ -34,6 +34,7 @@
     "nodemailer": "^6.4.17",
     "nodemailer-mailgun-transport": "^2.0.2",
     "nodemon": "^2.0.4",
+    "peer": "^0.6.1",
     "slugify": "^1.4.5",
     "stripe": "^8.129.0",
     "uniqueid": "^1.0.0"

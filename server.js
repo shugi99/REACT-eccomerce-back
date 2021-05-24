@@ -3,9 +3,10 @@ const mongoose = require('mongoose');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const { readdirSync } = require('fs');
+const {readdirSync} = require('fs');
 require('dotenv').config();
 const connectDB = require('./config/db');
+const {ExpressPeerServer} = require('peer');
 // app
 const app = express();
 connectDB();
@@ -13,11 +14,20 @@ connectDB();
 
 // middlewares
 app.use(morgan('dev'));
-app.use(bodyParser.json({ limit: '2mb' }));
+app.use(bodyParser.json({limit: '2mb'}));
 app.use(cors());
+
+ExpressPeerServer(http, {path: '/'});
 
 // routes middleware
 readdirSync('./routes').map((r) => app.use('/api', require('./routes/' + r)));
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('client/build'));
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+  });
+}
 
 // port
 const port = process.env.PORT || 8000;
