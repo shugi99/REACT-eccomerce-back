@@ -11,6 +11,7 @@ const {ExpressPeerServer} = require('peer');
 const app = express();
 connectDB();
 // db
+const http = require('http').createServer(app);
 
 // middlewares
 app.use(morgan('dev'));
